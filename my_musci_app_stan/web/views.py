@@ -11,10 +11,14 @@ def get_profile():
         return Profile.objects.get()
     except:
         return None
+    # except Profile.DoesNotExist as ex:
+    #     return None
 
 
 # extra def
 def profile_create(request):
+    if get_profile() is not None:
+        return redirect('index')
     if request.method == 'POST':
         form = CreateProfileForm(request.POST, request.FILES)
         if form.is_valid():
@@ -25,7 +29,7 @@ def profile_create(request):
 
     context = {
         'form': form,
-        'profile_exists': False,
+        'profile_exists': True,
     }
 
     return render(request, 'home-no-profile.html', context)
@@ -33,13 +37,14 @@ def profile_create(request):
 
 def home_with_profile(request):
     profile = get_profile()
-    albums = Album.objects.all()
+
     if profile is None:
         return redirect('home with no profile')
+        # same as return profile_create(request)
 
+    albums = Album.objects.all()
     context = {
         'albums': albums,
-        'profile': profile,
 
     }
 
@@ -95,7 +100,6 @@ def edit_album(request, pk):
 def delete_album(request, pk):
     album = Album.objects.get(pk=pk)
 
-
     if request.method == 'POST':
         form = DeleteAlbumForm(request.POST, instance=album)
         if form.is_valid():
@@ -107,7 +111,6 @@ def delete_album(request, pk):
 
         'form': form,
         'album': album,
-
 
     }
     return render(request, 'delete-album.html', context)

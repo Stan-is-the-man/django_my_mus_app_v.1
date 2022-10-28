@@ -12,6 +12,7 @@
             <!-- If albums in catalog -->
             <h1>All Albums</h1>
         {% endif %}
+
         <!-- First Card-Box in catalog -->
         {% for album in albums %}
             <div class="card-box">
@@ -24,7 +25,7 @@
                         <p class="price">Price: ${{ album.price|floatformat:2 }}</p>
                     </div>
                     <div class="btn-group">
-                        <a href="{% url 'album details' album.pk%}">Details</a>
+                        <a href="{% url 'album details' album.pk %}">Details</a>
                     </div>
                 </div>
             </div>
